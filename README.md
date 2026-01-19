@@ -1,7 +1,8 @@
 # git_practice3
 # 🇰🇪 Predicting Diabetes Readmission in Kenya Using Machine Learning
 
-![Diabetes Healthcare Banner](images/diabetes_banner.jpg)
+![Diabetes Healthcare Banner](<img width="1100" height="550" alt="image" src="https://github.com/user-attachments/assets/0d18b7e5-130d-43c5-a15b-d828043ebf06" />
+)
 
 ## 📌 Project Summary
 
