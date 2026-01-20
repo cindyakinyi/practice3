@@ -1,188 +1,146 @@
-# git_practice3
-# 🇰🇪 Predicting Diabetes Readmission in Kenya Using Machine Learning
+# Optimizing Healthcare Resource Allocation for Diabetic Patients in Kenya Using Machine Learning
 
-![Diabetes Healthcare Banner](<img width="1100" height="550" alt="image" src="https://github.com/user-attachments/assets/0d18b7e5-130d-43c5-a15b-d828043ebf06" />
-)
-
-## 📌 Project Summary
-
-Diabetes-related hospital readmissions place a heavy burden on Kenya’s healthcare system, increasing costs, overcrowding facilities, and signaling gaps in patient follow-up care.  
-
-This project applies **machine learning** to predict whether a diabetic patient is likely to be **readmitted after discharge**, enabling hospitals to take early preventive action.
-
-The analysis strictly follows the **CRISP-DM (Cross-Industry Standard Process for Data Mining)** framework to ensure clarity, reproducibility, and strong business alignment.
+![Diabetes Healthcare Banner](images/diabetes_banner.jpg)
 
 ---
 
-## 🧭 CRISP-DM PHASES
+## 1. Business Understanding
+
+### Problem Statement
+Diabetes-related hospital readmissions place significant pressure on Kenya’s already constrained healthcare system. High readmission rates increase costs, reduce hospital capacity, and often indicate gaps in discharge planning and follow-up care.
+
+### Project Objective
+To build a machine learning model that predicts **30-day hospital readmission risk** for diabetic patients, enabling:
+- Targeted post-discharge interventions
+- Efficient allocation of limited healthcare resources
+- Improved patient outcomes
+
+### Business Success Criteria (Kenya Context)
+- **Recall ≥ 65%** (priority metric to avoid missing high-risk patients)
+- Actionable insights that inform discharge planning and policy decisions
 
 ---
 
-## **Phase 1: Business Understanding**
+## 2. Data Understanding
 
-### 🔹 Business Problem
-Hospital readmissions:
-- Increase operational costs
-- Reduce hospital efficiency
-- Often indicate insufficient discharge planning or patient monitoring
+### Dataset Overview
+- **Source:** Hospital admission records (101,766 encounters)
+- **Target Variable:** Readmission within 30 days (binary)
+- **Features:** Demographics, diagnoses, medications, hospital utilization
 
-### 🔹 Business Objective
-To build a predictive model that:
-- Identifies diabetic patients at high risk of readmission
-- Supports hospitals in making data-driven discharge and follow-up decisions
-
-### 🔹 Success Criteria
-- A machine learning model with reliable predictive performance
-- Clear insights that can guide healthcare decision-making
-- Actionable recommendations for reducing readmission rates
+### Key Data Challenges
+- Severe class imbalance (~11% readmitted)
+- High missingness in selected features (e.g. weight)
+- Encoded categorical variables requiring mapping for interpretability
 
 ---
 
-## **Phase 2: Data Understanding**
+## 3. Exploratory Data Analysis (EDA)
 
-### 📂 Dataset Description
-- Patient hospital admission records
-- Combination of demographic, clinical, and treatment features
-- Target variable: **Readmission status**
+EDA was conducted to understand patterns and risk factors associated with readmission.
 
-### 🔹 Key Variables
-- Patient age and gender
-- Admission type
-- Medical history
-- Treatment and medication information
+### Key Visual Insights
+- Distribution of 30-day readmissions
+- Readmission rates by diagnosis group
+- Relationship between length of stay and readmission
+- Correlation between hospital utilization features and readmission
 
-### 🔹 Initial Observations
-- Presence of missing values
-- High number of categorical variables
-- Class imbalance in readmission outcomes
+#### Example EDA Visuals
+![Readmission by Diagnosis](images/readmission_by_diagnosis.png)
+![Readmission by Time in Hospital](images/readmission_by_time.png)
 
----
-
-## **Phase 3: Exploratory Data Analysis (EDA)**
-
-EDA was conducted to understand patterns, relationships, and potential predictors of readmission.
-
-### 📊 Distribution of Readmission Status
-![Readmission Distribution](images/readmission_distribution.png)
-
-### 📊 Age Distribution of Patients
-![Age Distribution](images/age_distribution.png)
-
-### 📊 Gender vs Readmission
-![Gender vs Readmission](images/gender_readmission.png)
-
-### 📊 Feature Correlation Heatmap
-![Correlation Heatmap](images/correlation_heatmap.png)
-
-### 🔍 Key Insights from EDA
-- Readmission is not evenly distributed across patients
-- Certain age groups show higher readmission rates
-- Some features demonstrate meaningful correlations with readmission
+### Key Findings
+- Higher hospital utilization strongly correlates with readmission
+- Certain discharge dispositions show significantly higher risk
+- Longer hospital stays are associated with increased readmission probability
 
 ---
 
-## **Phase 4: Data Preparation**
+## 4. Data Preparation & Feature Engineering
 
-This phase focused on transforming raw data into a machine-learning-ready format.
-
-### 🧹 Preprocessing Steps
-- Handling missing values
+### Preparation Steps
+- Binary target creation for 30-day readmission
+- Removal of features with excessive missing values
 - Encoding categorical variables
-- Feature scaling
-- Addressing class imbalance
-- Splitting data into training and testing sets
+- Stratified train-test split
 
-### 🔹 Rationale
-Proper preprocessing improves:
-- Model accuracy
-- Generalization
-- Interpretability of results
+### Feature Engineering
+- Hospital utilization metrics (total visits, emergency visits)
+- Grouped diagnosis categories
+- Medication change indicators
+- Simplified age groupings
 
----
-
-## **Phase 5: Modeling**
-
-Multiple models were trained to compare performance and robustness.
-
-### 🤖 Models Implemented
-1. **Logistic Regression**
-   - Baseline model
-   - Easy to interpret
-2. **Decision Tree Classifier**
-   - Captures non-linear relationships
-3. **Random Forest Classifier**
-   - Ensemble model
-   - Handles feature interactions effectively
+These steps improved model performance and clinical interpretability.
 
 ---
 
-## **Phase 6: Model Evaluation**
+## 5. Modeling
 
-Models were evaluated using:
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- Confusion matrices
+Three models were trained and evaluated:
+1. **Logistic Regression** (baseline and improved with SMOTE)
+2. **Random Forest**
+3. **XGBoost**
 
-### 🔹 Logistic Regression Confusion Matrix
-![Logistic Regression CM](images/logistic_regression_cm.png)
+### Modeling Focus
+- Handling class imbalance
+- Threshold optimization to prioritize Recall
+- Hyperparameter tuning
 
-### 🔹 Decision Tree Confusion Matrix
-![Decision Tree CM](images/decision_tree_cm.png)
+---
 
-### 🔹 Random Forest Confusion Matrix
-![Random Forest CM](images/random_forest_cm.png)
+## 6. Model Evaluation
 
-### 📈 Model Performance Comparison
+Models were evaluated using metrics aligned with the business objective.
+
+### Model Performance Summary
+
+| Model | Recall | Precision | AUC |
+|-----|-------|----------|-----|
+| Logistic Regression | 0.651 | 0.131 | 0.588 |
+| Random Forest | **0.690** | 0.154 | 0.660 |
+| XGBoost | 0.655 | **0.163** | **0.672** |
+
+### Evaluation Visuals
 ![Model Comparison](images/model_comparison.png)
+![Random Forest Confusion Matrix](images/random_forest_cm.png)
 
 ---
 
-## **Phase 7: Results & Interpretation**
+## 7. Conclusion
 
-### 🏆 Best Performing Model
-**Random Forest Classifier**
-
-#### Reasons:
-- Higher predictive accuracy
-- Better balance between recall and precision
-- Strong handling of complex feature relationships
+Machine learning can effectively identify diabetic patients at high risk of readmission in a resource-constrained healthcare setting.  
+Among the models tested, **Random Forest** achieved the best balance between predictive performance and practical deployment needs.
 
 ---
 
-## **Phase 8: Conclusions**
+## 8. Recommendations
 
-- Machine learning can effectively predict diabetes readmission risk
-- Proper preprocessing and class balancing significantly impact performance
-- Ensemble models outperform simpler models in this task
+### Final Model Recommendation
+✅ **Random Forest Classifier**
 
----
+### Why Random Forest?
+- Highest Recall (69%) — meets Kenya healthcare priority
+- Fewer false alarms than Logistic Regression
+- Clear feature importance for policy and clinical decisions
 
-## **Phase 9: Recommendations**
-
-### 🏥 For Healthcare Providers
-- Integrate the model into discharge planning systems
-- Flag high-risk patients for follow-up care
-- Allocate resources more efficiently
-
-### 🔄 For Future Improvements
-- Incorporate real-time patient monitoring data
-- Use larger, more localized Kenyan healthcare datasets
-- Explore advanced models such as Gradient Boosting
+### Business & Policy Recommendations
+- Prioritize high-risk patients for enhanced discharge planning
+- Use predictions to guide follow-up care allocation
+- Integrate model insights into hospital decision-support systems
 
 ---
 
-## 🛠 Tools & Technologies
-
-- **Python**
-- Pandas & NumPy
-- Matplotlib & Seaborn
+## Tools & Technologies
+- Python
+- Pandas, NumPy
 - Scikit-learn
+- Matplotlib / Seaborn
 - Jupyter Notebook
 
 ---
+ 
 
-## 📁 Project Structure
+@MoringaCapstoneProject_Group4
+
 
 
